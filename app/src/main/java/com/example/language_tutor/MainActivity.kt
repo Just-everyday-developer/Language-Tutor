@@ -16,17 +16,29 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.language_tutor.ui.theme.LanguageTutorTheme
+import com.gowtham.ratingbar.RatingBar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +65,8 @@ fun GreetingPreview() {
 fun App(modifier: Modifier) {
     Column {
         Header(Modifier)
-        Search(Modifier)
+        Search(Modifier.padding(bottom = 20.dp))
+        Courses(Modifier)
     }
 }
 
@@ -125,6 +138,161 @@ fun Search(modifier: Modifier) {
                                 )
                             },
                         )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RatingStar(
+    rating: Float = 5f,
+    maxRating: Int = 5,
+    onStarClick: (Int) -> Unit,
+    isIndicator: Boolean = false
+) {
+    Row {
+        for (i in 1..maxRating) {
+            if (i <= rating.toInt()) {
+                // Full stars
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(!isIndicator) {
+                            onStarClick(i)
+                        }
+                )
+            } else if (i == rating.toInt() + 1 && rating % 1 != 0f) {
+                // Partial star
+                PartialStar(fraction = rating % 1)
+            } else {
+                // Empty stars
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(!isIndicator) {
+                            onStarClick(i)
+                        }
+                )
+            }
+        }
+    }
+}
+@Composable
+private fun PartialStar(fraction: Float) {
+    val customShape = FractionalClipShape(fraction)
+
+    Box {
+        Icon(
+            imageVector = Icons.Default.Star,
+            contentDescription = null,
+            tint = Color.Gray,
+            modifier = Modifier.size(24.dp)
+        )
+        Box(
+            modifier = Modifier
+                .graphicsLayer (
+                    clip = true,
+                    shape = customShape
+                )
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+
+
+private class FractionalClipShape(private val fraction: Float) : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        return Outline.Rectangle(
+            rect = Rect(
+                left = 0f,
+                top = 0f,
+                right = size.width * fraction,
+                bottom = size.height
+            )
+        )
+    }
+}
+
+@Composable
+fun Courses(modifier: Modifier) {
+    val coursesList = listOf(
+        "Английский для начинающих",
+        "Английский для продолжающих",
+        "Подготовка к IELTS"
+    )
+    val prices = listOf("Бесплатно", "60$", "180$")
+    val photos = listOf(R.drawable.for_newbies, R.drawable.for_intermediaters, R.drawable.for_ielts)
+    LazyColumn(modifier.fillMaxSize()) {
+        items(listOf(0, 1, 2)) { index ->
+            ElevatedCard(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                modifier = modifier.padding(15.dp).height(170.dp).fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            ) {
+                Row(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    Column(
+                        modifier = modifier.width(120.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Image(
+                            painter = painterResource(id = photos[index]),
+                            contentDescription = "Изображение курса для начинающих",
+                            modifier = modifier
+                                .size(100.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .padding(bottom = 10.dp)
+                        )
+                        Text(
+                            text = prices[index],
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+
+                    Spacer(Modifier.width(16.dp))
+
+                    Column(
+                        modifier = modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = coursesList[index],
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        var rating by remember { mutableFloatStateOf(3.5f) }
+                        var isAvailable by remember { mutableStateOf(false) }
+                        RatingStar(
+                            rating = rating,
+                            maxRating = 5,
+                            onStarClick = { clickedStar ->
+                                rating = clickedStar.toFloat()
+                                isAvailable = !isAvailable
+                        }, isAvailable)
                     }
                 }
             }
