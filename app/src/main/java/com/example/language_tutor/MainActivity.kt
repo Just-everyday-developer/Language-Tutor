@@ -5,24 +5,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.material3.DockedSearchBar
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.Scaffold
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -30,15 +29,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.language_tutor.ui.theme.LanguageTutorTheme
-import com.gowtham.ratingbar.RatingBar
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,37 +47,122 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LanguageTutorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    App(modifier = Modifier.padding(innerPadding))
-                }
+                App()
             }
         }
     }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LanguageTutorTheme {
-        App(Modifier)
-    }
-}
-
-@Composable
-fun App(modifier: Modifier) {
-    Column {
-        Header(Modifier)
-        Search(Modifier.padding(bottom = 20.dp))
-        Courses(Modifier)
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        LanguageTutorTheme {
+            App()
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Header(modifier: Modifier) {
-    TopAppBar(
-        title = { Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) { Text("Каталог") } }
+fun App(modifier: Modifier = Modifier) {
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet(
+                modifier = Modifier.width(300.dp)
+            ) {
+                Text(
+                    text = "Меню",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(24.dp),
+                    fontWeight = FontWeight.Bold
+                )
+                Divider(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                )
+
+                // Улучшенные элементы меню
+                DrawerItem(text = "Главная", icon = Icons.Filled.Menu) { scope.launch { drawerState.close() } }
+                DrawerItem(text = "Моя статистика", icon = Icons.Rounded.Star) { scope.launch { drawerState.close() } }
+                DrawerItem(text = "Экзамен", icon = Icons.Filled.Star) { scope.launch { drawerState.close() } }
+                DrawerItem(text = "Запоминатор", icon = Icons.Rounded.Search) { scope.launch { drawerState.close() } }
+            }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                Header(
+                    title = "Каталог курсов",
+                    onMenuClick = { scope.launch { drawerState.open() } }
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.background
+        ) { innerPadding ->
+            Column(modifier = Modifier.padding(innerPadding)) {
+                Search(Modifier.padding(bottom = 20.dp))
+                Courses(Modifier)
+            }
+        }
+    }
+}
+
+@Composable
+fun DrawerItem(
+    text: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit
+) {
+    NavigationDrawerItem(
+        label = {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
+        selected = false,
+        icon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = text
+            )
+        },
+        onClick = onClick,
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clip(RoundedCornerShape(8.dp))
     )
-}}
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Header(
+    title: String,
+    onMenuClick: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = onMenuClick) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Открыть меню"
+                )
+            }
+        }
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +172,9 @@ fun Search(modifier: Modifier) {
     val suggestions = (1..100).map { "Курс $it" }
     val filteredSuggestions = if (searchText.isNotEmpty()) {
         suggestions.filter { it.contains(searchText, ignoreCase = true) }
-    } else { suggestions }
+    } else {
+        suggestions
+    }
 
     Box(modifier.fillMaxWidth()) {
         DockedSearchBar(
@@ -111,8 +199,7 @@ fun Search(modifier: Modifier) {
                 )
             },
         ) {
-            AnimatedVisibility(visible = isActive)
-            {
+            AnimatedVisibility(visible = isActive) {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(16.dp),
@@ -120,11 +207,10 @@ fun Search(modifier: Modifier) {
                 ) {
                     items(filteredSuggestions) { resultText ->
                         ListItem(
-                            modifier = Modifier
-                                .clickable {
-                                    searchText = resultText
-                                    isActive = false
-                                },
+                            modifier = Modifier.clickable {
+                                searchText = resultText
+                                isActive = false
+                            },
                             headlineContent = {
                                 Text(
                                     text = resultText,
@@ -155,56 +241,50 @@ fun RatingStar(
     Row {
         for (i in 1..maxRating) {
             if (i <= rating.toInt()) {
-                // Full stars
                 Icon(
-                    imageVector = Icons.Default.Star,
+                    imageVector = Icons.Filled.Star,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable(!isIndicator) {
-                            onStarClick(i)
-                        }
+                        .clickable(enabled = !isIndicator) { onStarClick(i) }
                 )
             } else if (i == rating.toInt() + 1 && rating % 1 != 0f) {
-                // Partial star
                 PartialStar(fraction = rating % 1)
             } else {
-                // Empty stars
                 Icon(
-                    imageVector = Icons.Default.Star,
+                    imageVector = Icons.Filled.Star,
                     contentDescription = null,
                     tint = Color.Gray,
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable(!isIndicator) {
-                            onStarClick(i)
-                        }
+                        .clickable(enabled = !isIndicator) { onStarClick(i) }
                 )
             }
         }
     }
 }
+
 @Composable
 private fun PartialStar(fraction: Float) {
     val customShape = FractionalClipShape(fraction)
 
     Box {
         Icon(
-            imageVector = Icons.Default.Star,
+            imageVector = Icons.Filled.Star,
             contentDescription = null,
             tint = Color.Gray,
             modifier = Modifier.size(24.dp)
         )
         Box(
             modifier = Modifier
-                .graphicsLayer (
+                .graphicsLayer(
                     clip = true,
                     shape = customShape
                 )
         ) {
             Icon(
-                imageVector = Icons.Default.Star,
+                imageVector = Icons.Filled.Star,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.size(24.dp)
@@ -212,7 +292,6 @@ private fun PartialStar(fraction: Float) {
         }
     }
 }
-
 
 private class FractionalClipShape(private val fraction: Float) : Shape {
     override fun createOutline(
@@ -239,30 +318,39 @@ fun Courses(modifier: Modifier) {
         "Подготовка к IELTS"
     )
     val prices = listOf("Бесплатно", "60$", "180$")
-    val photos = listOf(R.drawable.for_newbies, R.drawable.for_intermediaters, R.drawable.for_ielts)
+    val photos = listOf(
+        R.drawable.for_newbies,
+        R.drawable.for_intermediaters,
+        R.drawable.for_ielts
+    )
+
     LazyColumn(modifier.fillMaxSize()) {
         items(listOf(0, 1, 2)) { index ->
             ElevatedCard(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
-                modifier = modifier.padding(15.dp).height(170.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(15.dp)
+                    .height(170.dp)
+                    .fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             ) {
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
                     Column(
-                        modifier = modifier.width(120.dp),
+                        modifier = Modifier.width(120.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
                         Image(
                             painter = painterResource(id = photos[index]),
-                            contentDescription = "Изображение курса для начинающих",
-                            modifier = modifier
+                            contentDescription = "Изображение курса",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
                                 .size(100.dp)
                                 .clip(MaterialTheme.shapes.medium)
                                 .padding(bottom = 10.dp)
@@ -277,26 +365,26 @@ fun Courses(modifier: Modifier) {
                     Spacer(Modifier.width(16.dp))
 
                     Column(
-                        modifier = modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
                             text = coursesList[index],
                             style = MaterialTheme.typography.titleMedium
                         )
+                        // Каждая карточка имеет собственное состояние рейтинга
                         var rating by remember { mutableFloatStateOf(3.5f) }
-                        var isAvailable by remember { mutableStateOf(false) }
                         RatingStar(
                             rating = rating,
                             maxRating = 5,
                             onStarClick = { clickedStar ->
                                 rating = clickedStar.toFloat()
-                                isAvailable = !isAvailable
-                        }, isAvailable)
+                            },
+                            isIndicator = false
+                        )
                     }
                 }
             }
         }
     }
 }
-
