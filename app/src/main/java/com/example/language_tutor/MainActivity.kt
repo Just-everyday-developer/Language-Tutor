@@ -388,3 +388,188 @@ fun Courses(modifier: Modifier) {
         }
     }
 }
+
+
+
+
+
+
+
+// это с которого можно открыть запоминатор, позже переделаю
+
+//package com.example.test
+//
+//import android.os.Bundle
+//import androidx.activity.ComponentActivity
+//import androidx.activity.compose.setContent
+//import androidx.activity.enableEdgeToEdge
+//import androidx.compose.animation.AnimatedVisibility
+//import androidx.compose.foundation.Image
+//import androidx.compose.foundation.clickable
+//import androidx.compose.foundation.layout.*
+//import androidx.compose.foundation.lazy.LazyColumn
+//import androidx.compose.foundation.lazy.items
+//import androidx.compose.foundation.shape.RoundedCornerShape
+//import androidx.compose.material.icons.Icons
+//import androidx.compose.material.icons.filled.Menu
+//import androidx.compose.material.icons.filled.Star
+//import androidx.compose.material.icons.rounded.Clear
+//import androidx.compose.material.icons.rounded.Search
+//import androidx.compose.material.icons.rounded.Star
+//import androidx.compose.material3.*
+//import androidx.compose.runtime.*
+//import androidx.compose.ui.Alignment
+//import androidx.compose.ui.Modifier
+//import androidx.compose.ui.draw.clip
+//import androidx.compose.ui.graphics.vector.ImageVector
+//import androidx.compose.ui.res.painterResource
+//import androidx.compose.ui.text.font.FontWeight
+//import androidx.compose.ui.text.style.TextAlign
+//import androidx.compose.ui.unit.dp
+//import androidx.compose.ui.unit.sp
+//import androidx.navigation.NavController
+//import androidx.navigation.NavHostController
+//import androidx.navigation.compose.*
+//import com.example.test.ui.MemorizerScreen
+//import com.example.test.ui.theme.TestTheme
+//import kotlinx.coroutines.launch
+//
+//class MainActivity : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        enableEdgeToEdge()
+//        setContent {
+//            TestTheme {
+//                App()
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun App(modifier: Modifier = Modifier) {
+//    val navController = rememberNavController()
+//    val drawerState = rememberDrawerState(DrawerValue.Closed)
+//    val scope = rememberCoroutineScope()
+//
+//    ModalNavigationDrawer(
+//        drawerState = drawerState,
+//        drawerContent = {
+//            ModalDrawerSheet(
+//                modifier = Modifier.width(300.dp)
+//            ) {
+//                Text(
+//                    text = "Меню",
+//                    style = MaterialTheme.typography.headlineMedium,
+//                    modifier = Modifier.padding(24.dp),
+//                    fontWeight = FontWeight.Bold
+//                )
+//                Divider(
+//                    modifier = Modifier.padding(horizontal = 16.dp),
+//                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+//                )
+//
+//                DrawerItem(text = "Главная", icon = Icons.Filled.Menu) {
+//                    scope.launch { drawerState.close() }
+//                    navController.navigate("main")
+//                }
+//                DrawerItem(text = "Моя статистика", icon = Icons.Rounded.Star) {
+//                    scope.launch { drawerState.close() }
+//                    navController.navigate("statistics")
+//                }
+//                DrawerItem(text = "Экзамен", icon = Icons.Filled.Star) {
+//                    scope.launch { drawerState.close() }
+//                    navController.navigate("exam")
+//                }
+//                DrawerItem(text = "Запоминатор", icon = Icons.Rounded.Search) {
+//                    scope.launch { drawerState.close() }
+//                    navController.navigate("memorizer")
+//                }
+//            }
+//        }
+//    ) {
+//        Scaffold(
+//            topBar = {
+//                Header(
+//                    title = "Каталог курсов",
+//                    onMenuClick = { scope.launch { drawerState.open() } }
+//                )
+//            },
+//            containerColor = MaterialTheme.colorScheme.background
+//        ) { innerPadding ->
+//            Box(modifier = Modifier.padding(innerPadding)) {
+//                NavHost(navController, startDestination = "main") {
+//                    composable("main") { MainScreen() }
+//                    composable("statistics") { /* Экран статистики (пока заглушка) */ }
+//                    composable("exam") { /* Экран экзамена (пока заглушка) */ }
+//                    composable("memorizer") { MemorizerScreen(navController) }
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun DrawerItem(
+//    text: String,
+//    icon: ImageVector,
+//    onClick: () -> Unit
+//) {
+//    NavigationDrawerItem(
+//        label = {
+//            Text(
+//                text = text,
+//                style = MaterialTheme.typography.bodyLarge
+//            )
+//        },
+//        selected = false,
+//        icon = {
+//            Icon(
+//                imageVector = icon,
+//                contentDescription = text
+//            )
+//        },
+//        onClick = onClick,
+//        modifier = Modifier
+//            .padding(horizontal = 16.dp, vertical = 8.dp)
+//            .clip(RoundedCornerShape(8.dp))
+//    )
+//}
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun Header(
+//    title: String,
+//    onMenuClick: () -> Unit
+//) {
+//    TopAppBar(
+//        title = {
+//            Text(
+//                text = title,
+//                modifier = Modifier.fillMaxWidth(),
+//                textAlign = TextAlign.Center,
+//                fontWeight = FontWeight.Bold,
+//                fontSize = 20.sp
+//            )
+//        },
+//        navigationIcon = {
+//            IconButton(onClick = onMenuClick) {
+//                Icon(
+//                    imageVector = Icons.Filled.Menu,
+//                    contentDescription = "Открыть меню"
+//                )
+//            }
+//        }
+//    )
+//}
+//
+//@Composable
+//fun MainScreen() {
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text(text = "Добро пожаловать!", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+//    }
+//}
+
