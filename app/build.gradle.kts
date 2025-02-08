@@ -1,8 +1,11 @@
 plugins {
-    alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")  // Required for Room
+    id("com.android.application")
+
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -41,7 +44,7 @@ android {
 }
 
 dependencies {
-    val roomVersion = "2.6.1"
+    implementation(libs.firebase.database.ktx)
     val lifecycleVersion = "2.7.0"
 
     implementation(libs.androidx.core.ktx)
@@ -55,13 +58,13 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.compose.ratingbar)
 
+    implementation( "androidx.compose.material3:material3:1.1.0")
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
-
-    // Room
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
 
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
