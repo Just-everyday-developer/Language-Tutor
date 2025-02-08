@@ -1,8 +1,11 @@
-package com.example.test.data
+// data/database/AppDatabase.kt
+package com.example.language_tutor.data.database
 
 import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.language_tutor.data.model.Word
+import com.example.language_tutor.data.dao.WordDao
 
 @Database(entities = [Word::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
@@ -21,6 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
                 ).addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
+                        // Initial data
                         db.execSQL("INSERT INTO Word (word, translation, isLearned, level) VALUES ('apple', 'яблоко', 0, 'A1')")
                         db.execSQL("INSERT INTO Word (word, translation, isLearned, level) VALUES ('table', 'стол', 0, 'A1')")
                         db.execSQL("INSERT INTO Word (word, translation, isLearned, level) VALUES ('car', 'машина', 0, 'A2')")
@@ -33,4 +37,3 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 }
-

@@ -1,48 +1,48 @@
-package com.example.test.viewmodel
+// viewmodel/WordViewModel.kt
+package com.example.language_tutor.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.test.data.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.language_tutor.data.model.Word
+import com.example.language_tutor.data.repository.WordRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class WordViewModel(application: Application) : AndroidViewModel(application) {
-    private val db = AppDatabase.getDatabase(application)
-    private val wordDao = db.wordDao()
-
-    private val _words = MutableStateFlow<List<Word>>(emptyList())
-    val words: StateFlow<List<Word>> = _words
-
-    init {
-        loadWords()
-    }
-
-    fun loadWords() {
-        viewModelScope.launch {
-            _words.value = wordDao.getAllWords()
-        }
-    }
+class WordViewModel(private val repository: WordRepository) : ViewModel() {
+    val words: Flow<List<Word>> = repository.allWords
 
     fun addWord(word: String, translation: String, level: String) {
         viewModelScope.launch {
-            wordDao.insert(Word(word = word, translation = translation, level = level))
-            loadWords()
+            repository.insert(
+                Word(
+                    word = word,
+                    translation = translation,
+                    level = level
+                )
+            )
         }
     }
 
     fun deleteWord(word: Word) {
         viewModelScope.launch {
-            wordDao.delete(word)
-            loadWords()
+            repository.delete(word)
         }
     }
 
     fun toggleLearnedStatus(word: Word) {
         viewModelScope.launch {
-            wordDao.updateLearnedStatus(word.id, !word.isLearned)
-            loadWords()
+            repository.updateLearnedStatus(word.id, !word.isLearned)
+        }
+    }
+
+    class Factory(private val repository: WordRepository) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(WordViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return WordViewModel(repository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
