@@ -1,4 +1,5 @@
-package com.example.test.data
+// data/model/Word.kt
+package com.example.language_tutor.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
