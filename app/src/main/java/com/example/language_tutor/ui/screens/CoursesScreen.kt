@@ -10,8 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.R
-import androidx.core.R.drawable.*
+import com.example.language_tutor.R
+import com.example.language_tutor.R.drawable.*
 import com.example.language_tutor.ui.components.CourseCard
 import com.example.language_tutor.ui.components.Search
 
