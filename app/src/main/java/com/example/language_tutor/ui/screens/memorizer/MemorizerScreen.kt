@@ -8,12 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.language_tutor.viewmodel.WordViewModel
-import com.example.language_tutor.ui.components.memorizer.WordInput
-import com.example.language_tutor.ui.components.memorizer.WordsList
+
 
 @Composable
-fun MemorizerScreen(navController: NavController, viewModel: WordViewModel = viewModel()) {
+fun MemorizerScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,9 +22,6 @@ fun MemorizerScreen(navController: NavController, viewModel: WordViewModel = vie
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-
-        WordInput(viewModel)
-        WordsList(viewModel)
     }
 }
 
