@@ -1,25 +1,86 @@
-// ui/screens/ExamScreen.kt
 package com.example.language_tutor.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.language_tutor.ui.components.LevelButton
+import com.example.language_tutor.ui.components.ActionButton
+import com.example.language_tutor.ui.components.SectionButton
+
 
 @Composable
 fun ExamScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Экзамен",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        // Add your exam content here
+    var selectedLevel by remember { mutableStateOf<String?>(null) }
+    var selectedSection by remember { mutableStateOf<String?>(null) }
+
+    Column {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(350.dp)
+                .padding(vertical = 20.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Выберите уровень", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+
+                Row(
+                    modifier = Modifier.padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(1.dp)
+                ) {
+                    listOf("A1", "A2", "B1", "B2").forEach { level ->
+                        LevelButton(level, selectedLevel) { selectedLevel = it }
+                    }
+                }
+
+                ActionButton(text = "Начать", onClick = { /* Implement navigation later */ })
+            }
+        }
+
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(360.dp)
+                .padding(vertical = 20.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Mock IELTS", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("Выберите секции", fontSize = 16.sp, modifier = Modifier.padding(top = 8.dp))
+
+                Row(
+                    modifier = Modifier.padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    listOf("Reading", "Listening", "Writing").forEach { section ->
+                        SectionButton(section, selectedSection) { selectedSection = it }
+                    }
+                }
+
+                ActionButton(text = "Начать", onClick = { /* Implement navigation later */ })
+            }
+        }
     }
 }

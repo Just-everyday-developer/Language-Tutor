@@ -43,7 +43,7 @@ fun DrawerItem(
 
 @Composable
 fun AppDrawer(
-    onDestinationClicked: (String) -> Unit
+    onDestinationClicked: (route: String) -> Unit
 ) {
     ModalDrawerSheet(
         modifier = Modifier.width(300.dp)
@@ -63,5 +63,7 @@ fun AppDrawer(
         DrawerItem("Моя статистика", Icons.Filled.Star) { onDestinationClicked("statistics") }
         DrawerItem("Экзамен", Icons.Filled.Star) { onDestinationClicked("exam") }
         DrawerItem("Запоминатор", Icons.Rounded.Search) { onDestinationClicked("memorizer") }
+
     }
+
 }

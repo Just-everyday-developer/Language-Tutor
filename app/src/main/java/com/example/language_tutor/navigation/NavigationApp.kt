@@ -1,4 +1,3 @@
-// navigation/NavigationApp.kt
 package com.example.language_tutor.navigation
 
 import androidx.compose.foundation.layout.padding
@@ -7,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import com.example.language_tutor.ui.screens.*
@@ -14,13 +14,27 @@ import com.example.language_tutor.ui.components.AppDrawer
 import com.example.language_tutor.ui.components.Header
 import com.example.language_tutor.ui.screens.memorizer.MemorizerScreen
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationApp() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    // Add this to track current route
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+
+    // Function to get screen title
+    val getScreenTitle = { route: String? ->
+        when (route) {
+            "main" -> "Каталог курсов"
+            "statistics" -> "Статистика"
+            "exam" -> "Экзамены"
+            "memorizer" -> "Запоминатель"
+            else -> "Каталог курсов"
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -38,7 +52,7 @@ fun NavigationApp() {
         Scaffold(
             topBar = {
                 Header(
-                    title = "Каталог курсов",
+                    title = getScreenTitle(currentRoute),
                     onMenuClick = { scope.launch { drawerState.open() } }
                 )
             },
@@ -57,4 +71,3 @@ fun NavigationApp() {
         }
     }
 }
-
