@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import com.example.language_tutor.ui.screens.*
 import com.example.language_tutor.ui.components.AppDrawer
 import com.example.language_tutor.ui.components.Header
-import com.example.language_tutor.ui.screens.memorizer.MemorizerScreen
+import com.example.language_tutor.ui.screens.MemorizerScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

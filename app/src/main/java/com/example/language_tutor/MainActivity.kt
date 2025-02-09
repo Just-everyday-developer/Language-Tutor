@@ -1,4 +1,4 @@
-// MainActivity.kt
+// com.example.language_tutor.ui.screens.memorizer.MainActivity.kt
 package com.example.language_tutor
 
 import android.os.Bundle

@@ -27,17 +27,7 @@ fun MemorizerScreen(navController: NavHostController, viewModel: MemorizerViewMo
     var newWord by remember { mutableStateOf("") }
     var newTranslation by remember { mutableStateOf("") }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Словарь") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White
-                )
-            )
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
