@@ -67,7 +67,7 @@ fun CourseCard(
                 )
                 Text(
                     text = price,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = Color.Blue
                 )
             }

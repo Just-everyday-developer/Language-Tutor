@@ -17,11 +17,10 @@ fun Header(
     title: String,
     onMenuClick: () -> Unit
 ) {
-    TopAppBar(
+    CenterAlignedTopAppBar(
         title = {
             Text(
                 text = title,
-                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp

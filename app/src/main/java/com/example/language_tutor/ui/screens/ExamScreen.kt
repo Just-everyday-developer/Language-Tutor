@@ -2,6 +2,8 @@
 package com.example.language_tutor.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -71,11 +73,11 @@ fun ExamScreen() {
                 Text("Mock IELTS", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Text("Выберите секции", fontSize = 16.sp, modifier = Modifier.padding(top = 8.dp))
 
-                Row(
-                    modifier = Modifier.padding(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                LazyRow(
+                    modifier = Modifier.padding(vertical = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(1.dp)
                 ) {
-                    listOf("Reading", "Listening", "Writing").forEach { section ->
+                    items(listOf("Reading", "Listening", "Writing")) { section ->
                         SectionButton(section, selectedSection) { selectedSection = it }
                     }
                 }

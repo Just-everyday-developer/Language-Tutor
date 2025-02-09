@@ -31,7 +31,7 @@ fun NavigationApp() {
             "main" -> "Каталог курсов"
             "statistics" -> "Статистика"
             "exam" -> "Экзамены"
-            "memorizer" -> "Запоминатель"
+            "memorizer" -> "Запоминатор"
             else -> "Каталог курсов"
         }
     }

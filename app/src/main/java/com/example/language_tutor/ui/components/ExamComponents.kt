@@ -36,7 +36,7 @@ fun SectionButton(section: String, selected: String?, onClick: (String) -> Unit)
             containerColor = if (selected == section) Color.Blue else Color.Gray
         ),
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.width(105.dp)
+        modifier = Modifier.width(200.dp).padding(10.dp)
     ) {
         Text(section, color = Color.White)
     }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -23,29 +24,28 @@ fun AccountScreen(navController: NavController, authRepository: AuthRepository =
     var password by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Аккаунт") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White
-                )
-            )
-        }
-    ) { paddingValues ->
+    Scaffold() { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
+                horizontalArrangement = Arrangement.Center) {
+                Text("Добро пожаловать!", fontSize = 40.sp)
+            }
+
             if (user == null) {
                 TextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
                 Spacer(modifier = Modifier.height(8.dp))
-                TextField(value = password, onValueChange = { password = it }, label = { Text("Пароль") })
+                TextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Пароль") })
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
@@ -66,7 +66,8 @@ fun AccountScreen(navController: NavController, authRepository: AuthRepository =
                     onClick = {
                         scope.launch {
                             val result = authRepository.registerUser(email, password)
-                            message = if (result != null) "Регистрация успешна" else "Ошибка регистрации"
+                            message =
+                                if (result != null) "Регистрация успешна" else "Ошибка регистрации"
                         }
                     },
                     shape = RoundedCornerShape(12.dp),
@@ -76,7 +77,11 @@ fun AccountScreen(navController: NavController, authRepository: AuthRepository =
                     Text("Зарегистрироваться", color = Color.White)
                 }
             } else {
-                Text("Вы вошли как: ${user.email}", fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
+                Text(
+                    "Вы вошли как: ${user.email}",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
@@ -99,3 +104,4 @@ fun AccountScreen(navController: NavController, authRepository: AuthRepository =
         }
     }
 }
+
