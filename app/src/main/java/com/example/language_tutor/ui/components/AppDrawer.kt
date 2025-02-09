@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.ui.draw.clip
 
 @Composable
@@ -63,5 +64,6 @@ fun AppDrawer(
         DrawerItem("Моя статистика", Icons.Filled.Star) { onDestinationClicked("statistics") }
         DrawerItem("Экзамен", Icons.Filled.Star) { onDestinationClicked("exam") }
         DrawerItem("Запоминатор", Icons.Rounded.Search) { onDestinationClicked("memorizer") }
+        DrawerItem("Аккаунт", Icons.Rounded.AccountCircle) { onDestinationClicked("account") }
     }
 }

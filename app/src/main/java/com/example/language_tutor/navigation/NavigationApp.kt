@@ -54,6 +54,8 @@ fun NavigationApp() {
                 composable("statistics") { StatisticsScreen() }
                 composable("exam") { ExamScreen() }
                 composable("memorizer") { MemorizerScreen(navController) }
+                composable("account") { AccountScreen(navController) }
+
             }
         }
     }
