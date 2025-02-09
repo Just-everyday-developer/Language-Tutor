@@ -45,6 +45,8 @@ android {
 
 dependencies {
     implementation(libs.firebase.database.ktx)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth.ktx)
     val lifecycleVersion = "2.7.0"
 
     implementation(libs.androidx.core.ktx)
@@ -62,6 +64,10 @@ dependencies {
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
