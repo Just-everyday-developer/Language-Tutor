@@ -1,4 +1,3 @@
-// ui/screens/ExamScreen.kt
 package com.example.language_tutor.ui.screens
 
 import androidx.compose.foundation.layout.*
@@ -17,9 +16,8 @@ import com.example.language_tutor.ui.components.LevelButton
 import com.example.language_tutor.ui.components.ActionButton
 import com.example.language_tutor.ui.components.SectionButton
 
-
 @Composable
-fun ExamScreen() {
+fun ExamScreen(onStartTest: (String) -> Unit) {
     var selectedLevel by remember { mutableStateOf<String?>(null) }
     var selectedSection by remember { mutableStateOf<String?>(null) }
 
@@ -50,10 +48,16 @@ fun ExamScreen() {
                     }
                 }
 
-                ActionButton(text = "Начать", onClick = { /* Implement navigation later */ })
+                ActionButton(
+                    text = "Начать",
+                    onClick = {
+                        selectedLevel?.let { level ->
+                            onStartTest(level)
+                        }
+                    }
+                )
             }
         }
-
 
         Card(
             modifier = Modifier
@@ -82,7 +86,7 @@ fun ExamScreen() {
                     }
                 }
 
-                ActionButton(text = "Начать", onClick = { /* Implement navigation later */ })
+                ActionButton(text = "Начать", onClick = { /* TODO: Implement IELTS test navigation */ })
             }
         }
     }
